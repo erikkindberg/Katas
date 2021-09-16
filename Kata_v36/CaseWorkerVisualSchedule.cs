@@ -15,11 +15,14 @@ namespace Scheduler
     public partial class CaseWorkerVisualSchedule : UserControl
     {
         private readonly CaseWorker _caseWorker;
+        private Action meetingCaseHandler;
 
         public CaseWorkerVisualSchedule(CaseWorker caseWorker)
         {
             _caseWorker = caseWorker;
             InitializeComponent();
+
+            Action meetingCaseHandler = MainForm.RefreshFreeSpotsLabel();
 
             label_CaseWorkerName.Text = _caseWorker.Name;
             dateTimePicker.Format = DateTimePickerFormat.Custom;
@@ -32,14 +35,29 @@ namespace Scheduler
 
         private void Button_ChangeDate_Click(object sender, EventArgs e)
         {
-            int index = listBox_Meetings.SelectedIndex; 
-            _caseWorker.ChangeMeeting(index, dateTimePicker.Value);
+            int index = listBox_Meetings.SelectedIndex;
+            try
+            {
+                _caseWorker.ChangeMeeting(index, dateTimePicker.Value);
+            }
+            catch (MeetingOverlapException ex)
+            {
+                MessageBox.Show("Double booking.");
+            }
             RefreshDisplayedMeetings();
         }
 
         private void Button_Add_Click(object sender, EventArgs e)
         {
-            _caseWorker.NewDateAdded(dateTimePicker.Value);
+            
+            try
+            {
+                _caseWorker.NewDateAdded(dateTimePicker.Value);
+            }
+            catch (MeetingOverlapException ex)
+            {
+                MessageBox.Show("Double booking.");
+            }
             RefreshDisplayedMeetings();
         }
 

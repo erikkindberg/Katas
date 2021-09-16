@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Scheduler.Exceptions;
+using System;
 using System.Collections.Generic;
-using Scheduler.Exceptions;
+using System.Diagnostics;
 
 namespace Scheduler.Models
 {
@@ -30,6 +31,10 @@ namespace Scheduler.Models
             foreach (Meeting meeting in Meetings)
             {
                 // TODO kasta MeetingOverlapException om två möten överlappar
+                if (newMeeting.Overlap(meeting) == false)
+                {
+                    throw new MeetingOverlapException(meeting);
+                }
             }
 
             Meetings.Add(newMeeting);
@@ -46,6 +51,13 @@ namespace Scheduler.Models
                     continue;
 
                 // TODO kasta MeetingOverlapException om två möten överlappar
+
+                if (meetingToChange.Overlap(meeting) == false)
+                {
+                    throw new MeetingOverlapException(meeting);
+                }
+                
+
             }
 
             meetingToChange.Start = newStart;

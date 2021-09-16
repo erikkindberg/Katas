@@ -31,9 +31,11 @@ namespace Scheduler.Models
 
         public override string ToString()
         {
-            string date = Start.ToString("d'/'M'/'yy");
+            string date = Start.ToString("d'/'M'/'yy h:mm");
+            DateTime endTime = Start.Add(Duration);
+            string endTimeString = endTime.ToString("d'/'M'/'yy h:mm");
 
-            string info = date;
+            string info = String.Format("{0} - {1}", date, endTimeString);
 
             if (Applicant != null)
                 info += " with: " + Applicant.Name;
