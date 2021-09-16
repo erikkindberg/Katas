@@ -6,6 +6,17 @@ namespace ChuckJokeRadio
     class Program
     {
         //TODO plocka även ut och visa datumet för när skämtet skapades/senast uppdaterades
+        /* Exempel på ett svar från servern
+            {
+              "categories": [],
+              "created_at": "2020-01-05 13:42:23.484083",
+              "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+              "id": "cRcjbqJpQ-GMzIawRcvVlA",
+              "updated_at": "2020-01-05 13:42:23.484083",
+              "url": "https://api.chucknorris.io/jokes/cRcjbqJpQ-GMzIawRcvVlA",
+              "value": //"The only time Chuck Norris felt sadness was when he read Nuck Chorris' jokes."
+            }
+        */
         static void Main(string[] args)
         {
             HttpClient client = new HttpClient();
@@ -25,11 +36,9 @@ namespace ChuckJokeRadio
                 int createdStart = json.IndexOf(createdAt) + createdAt.Length;
                 int createdEnd = json.IndexOf("\"", createdStart);
 
-                string joke = json.Substring(start, end - start);
                 string created = json.Substring(createdStart, createdEnd - createdStart);
                 
                 Console.WriteLine(joke);
-                Console.WriteLine(String.Format("Created: {0}", created));
 
                 Console.WriteLine();
                 Console.Write("Press enter for another joke");
